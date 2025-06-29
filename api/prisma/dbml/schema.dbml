@@ -1,0 +1,137 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table roles {
+  id String [pk]
+  name String [unique, not null]
+  clients clients [not null]
+  employees employees [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table users {
+  id String [pk]
+  email String [unique, not null]
+  password String [not null]
+  isActivated Boolean [not null, default: false]
+  activationLink String [not null]
+  avatars avatars [not null]
+  token tokens
+  client clients
+  employee employees
+  reviews reviews [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table avatars {
+  path String [unique, not null]
+  user users [not null]
+  userId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table tokens {
+  token String [unique, not null]
+  user users [not null]
+  userId String [unique, not null]
+}
+
+Table employees {
+  id String [pk]
+  name String [not null]
+  employmentDate DateTime [not null]
+  dismissalDate DateTime
+  user users [not null]
+  userId String [unique, not null]
+  role roles [not null]
+  roleId String [not null]
+}
+
+Table clients {
+  id String [pk]
+  name String
+  dateOfBirth DateTime
+  user users [not null]
+  userId String [unique, not null]
+  role roles [not null]
+  roleId String [not null]
+}
+
+Table reviews {
+  id String [pk]
+  title String [not null]
+  description String [not null]
+  score Int [not null]
+  user users
+  userId String
+  movie movies [not null]
+  movieId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+
+  indexes {
+    (userId, movieId) [unique]
+  }
+}
+
+Table movies {
+  id String [pk]
+  name String [not null]
+  description String [not null]
+  rating Float [not null]
+  link String [not null]
+  isAvailable Boolean [not null, default: false]
+  reviews reviews [not null]
+  genres movie_genres [not null]
+  images movie_images [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Table movie_images {
+  path String [unique, not null]
+  movie movies [not null]
+  movieId String [not null]
+}
+
+Table movie_genres {
+  id String [pk]
+  movie movies [not null]
+  movieId String [not null]
+  genre genres [not null]
+  genreId String [not null]
+}
+
+Table genres {
+  id String [pk]
+  name String [unique, not null]
+  movies movie_genres [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Ref: avatars.userId > users.id [delete: Cascade]
+
+Ref: tokens.userId - users.id [delete: Cascade]
+
+Ref: employees.userId - users.id [delete: Cascade]
+
+Ref: employees.roleId > roles.id [delete: Restrict]
+
+Ref: clients.userId - users.id [delete: Cascade]
+
+Ref: clients.roleId > roles.id [delete: Restrict]
+
+Ref: reviews.userId > users.id [delete: Set Null]
+
+Ref: reviews.movieId > movies.id
+
+Ref: movie_images.movieId > movies.id [delete: Cascade]
+
+Ref: movie_genres.movieId > movies.id
+
+Ref: movie_genres.genreId > genres.id

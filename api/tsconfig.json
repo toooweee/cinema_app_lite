@@ -1,0 +1,83 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2023",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
+    "strictBindCallApply": true,
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@common": [
+        "libs/common/src"
+      ],
+      "@common/*": [
+        "libs/common/src/*"
+      ],
+      "@prisma": [
+        "src/prisma"
+      ],
+      "@prisma/*": [
+        "src/prisma/*"
+      ],
+      "@users": [
+        "src/users"
+      ],
+      "@users/*": [
+        "src/users/*"
+      ],
+      "@auth": [
+        "src/auth"
+      ],
+      "@auth/*": [
+        "src/auth/*"
+      ],
+      "@tokens": [
+        "src/tokens"
+      ],
+      "@tokens/*": [
+        "src/tokens/*"
+      ],
+      "@roles": [
+        "src/roles"
+      ],
+      "@roles/*": [
+        "src/roles/*"
+      ],
+      "@movies": [
+        "src/movies"
+      ],
+      "@movies/*": [
+        "src/movies/*"
+      ],
+      "@mail": [
+        "src/mail"
+      ],
+      "@mail/*": [
+        "src/mail/*"
+      ],
+      "@clients": [
+        "src/clients"
+      ],
+      "@clients/*": [
+        "src/clients/*"
+      ],
+      "@employees": [
+        "src/employees"
+      ],
+      "@employees/*": [
+        "src/employees/*"
+      ]
+    }
+  }
+}

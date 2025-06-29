@@ -1,0 +1,97 @@
+.api-test {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.api-test h2 {
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.test-buttons {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.test-buttons button {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.test-buttons button:hover:not(:disabled) {
+  background: #5a67d8;
+  transform: translateY(-2px);
+}
+
+.test-buttons button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.test-results {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.test-result {
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+}
+
+.test-result.success {
+  background: #f0fff4;
+  border-color: #9ae6b4;
+}
+
+.test-result.error {
+  background: #fed7d7;
+  border-color: #feb2b2;
+}
+
+.test-result h3 {
+  margin: 0 0 15px 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.test-result pre {
+  background: #f7fafc;
+  padding: 15px;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 12px;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.test-result p {
+  margin: 0;
+  color: #e53e3e;
+  font-weight: 500;
+}
+
+/* Адаптивность */
+@media (max-width: 600px) {
+  .test-buttons {
+    flex-direction: column;
+  }
+
+  .test-buttons button {
+    width: 100%;
+  }
+}

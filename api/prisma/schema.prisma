@@ -1,0 +1,154 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  id        String     @id @default(uuid())
+  name      String     @unique
+  clients   Client[]
+  employees Employee[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([name])
+  @@map("roles")
+}
+
+model User {
+  id             String    @id @default(uuid())
+  email          String    @unique
+  password       String
+  isActivated    Boolean   @default(false) @map("is_activated")
+  activationLink String    @map("activation_link")
+  avatars        Avatar[]
+  token          Token?
+  client         Client?
+  employee       Employee?
+  reviews        Review[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Avatar {
+  path   String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("avatars")
+}
+
+model Token {
+  token  String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @unique @map("user_id")
+
+  @@map("tokens")
+}
+
+model Employee {
+  id             String    @id @default(uuid())
+  name           String
+  employmentDate DateTime  @map("employment_date")
+  dismissalDate  DateTime? @map("dissimal_date")
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String    @unique @map("user_id")
+  role           Role      @relation(fields: [roleId], references: [id], onDelete: Restrict)
+  roleId         String    @map("role_id")
+
+  @@map("employees")
+}
+
+model Client {
+  id          String    @id @default(uuid())
+  name        String?
+  dateOfBirth DateTime? @map("date_of_birth")
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String    @unique @map("user_id")
+  role        Role      @relation(fields: [roleId], references: [id], onDelete: Restrict)
+  roleId      String    @map("role_id")
+
+  @@map("clients")
+}
+
+model Review {
+  id          String  @id @default(uuid())
+  title       String
+  description String
+  score       Int
+  user        User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId      String? @map("user_id")
+  movie       Movie   @relation(fields: [movieId], references: [id])
+  movieId     String  @map("movie_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([userId, movieId])
+  @@index([userId, movieId, score])
+  @@map("reviews")
+}
+
+model Movie {
+  id          String        @id @default(uuid())
+  name        String
+  description String
+  rating      Float
+  link        String
+  isAvailable Boolean       @default(false)
+  reviews     Review[]
+  genres      MovieGenres[]
+  images      MovieImages[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([name, rating])
+  @@map("movies")
+}
+
+model MovieImages {
+  path    String @unique
+  movie   Movie  @relation(fields: [movieId], references: [id], onDelete: Cascade)
+  movieId String @map("movie_id")
+
+  @@map("movie_images")
+}
+
+model MovieGenres {
+  id      String @id @default(uuid())
+  movie   Movie  @relation(fields: [movieId], references: [id])
+  movieId String @map("movie_id")
+  genre   Genre  @relation(fields: [genreId], references: [id])
+  genreId String @map("genre_id")
+
+  @@map("movie_genres")
+}
+
+model Genre {
+  id     String        @id @default(uuid())
+  name   String        @unique
+  movies MovieGenres[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([name])
+  @@map("genres")
+}
