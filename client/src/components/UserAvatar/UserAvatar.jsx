@@ -54,8 +54,12 @@ const UserAvatar = () => {
 
   // Получаем первую букву имени или email для аватара
   const getInitials = () => {
-    if (user?.name) {
-      return user.name.charAt(0).toUpperCase();
+    // Проверяем имя из client или employee
+    if (user?.client?.name) {
+      return user.client.name.charAt(0).toUpperCase();
+    }
+    if (user?.employee?.name) {
+      return user.employee.name.charAt(0).toUpperCase();
     }
     if (user?.email) {
       return user.email.charAt(0).toUpperCase();
@@ -63,13 +67,36 @@ const UserAvatar = () => {
     return "U";
   };
 
+  // Получаем отображаемое имя
+  const getDisplayName = () => {
+    if (user?.client?.name) {
+      return user.client.name;
+    }
+    if (user?.employee?.name) {
+      return user.employee.name;
+    }
+    if (user?.email) {
+      return user.email.split("@")[0];
+    }
+    return "Пользователь";
+  };
+
+  // Получаем роль пользователя
+  const getUserRole = () => {
+    if (user?.client?.role?.name) {
+      return user.client.role.name;
+    }
+    if (user?.employee?.role?.name) {
+      return user.employee.role.name;
+    }
+    return null;
+  };
+
   return (
     <div className="user-avatar-container" ref={dropdownRef}>
       <button className="avatar-button" onClick={toggleDropdown}>
         <div className="avatar">{getInitials()}</div>
-        <span className="avatar-name">
-          {user?.name || user?.email?.split("@")[0] || "Пользователь"}
-        </span>
+        <span className="avatar-name">{getDisplayName()}</span>
         <svg
           className={`dropdown-arrow ${isOpen ? "open" : ""}`}
           width="12"
@@ -90,10 +117,11 @@ const UserAvatar = () => {
           <div className="dropdown-header">
             <div className="dropdown-avatar">{getInitials()}</div>
             <div className="dropdown-user-info">
-              <div className="dropdown-name">
-                {user?.name || "Пользователь"}
-              </div>
+              <div className="dropdown-name">{getDisplayName()}</div>
               <div className="dropdown-email">{user?.email}</div>
+              {getUserRole() && (
+                <div className="dropdown-role">{getUserRole()}</div>
+              )}
             </div>
           </div>
 

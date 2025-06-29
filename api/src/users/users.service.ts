@@ -5,7 +5,9 @@ import { CreateUserDto } from '@users/dto';
 import * as argon from 'argon2';
 import * as uuid from 'uuid';
 import { ConfigService } from '@nestjs/config';
-import { RolesService } from '@roles/roles.service';
+import { RequestUser } from '@auth/types';
+import Roles from '@roles/types/roles.enum';
+import SortOrder = Prisma.SortOrder;
 
 @Injectable()
 export class UsersService {
@@ -36,5 +38,35 @@ export class UsersService {
     return this.prismaService.user.findUnique({
       where,
     });
+  }
+
+  async me(currentUser: RequestUser) {
+    const includeOption: Prisma.UserInclude = {
+      avatars: {
+        orderBy: [{ createdAt: 'desc' }],
+        take: 1,
+        select: { path: true },
+      },
+      reviews: true,
+      client: {
+        include: {
+          role: true,
+        },
+      },
+      employee: {
+        include: {
+          role: true,
+        },
+      },
+    };
+
+    const user = await this.prismaService.user.findUniqueOrThrow({
+      where: { id: currentUser.sub },
+      include: includeOption,
+    });
+
+    console.log(user);
+
+    return user;
   }
 }

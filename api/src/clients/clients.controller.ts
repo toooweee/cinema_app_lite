@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Get, Param, UseGuards } from '@nestjs/common';
 import { ClientsService } from './clients.service';
 import { RolesGuard } from '@roles/guard';
 import { ROLES } from '@roles/decorator';
@@ -22,8 +22,8 @@ export class ClientsController {
   @Get(':id')
   @ROLES(Roles.ADMIN, Roles.MANAGER)
   @ApiOperation({ summary: '[ADMIN, MANAGER] получить одного пользователя' })
-  async findOne() {
-    return this.clientsService.findOne();
+  async findOne(@Param('id') id: string) {
+    return this.clientsService.findOne(id);
   }
 
   @Delete(':id')

@@ -1,6 +1,8 @@
 import { Controller, Get } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { CurrentUser } from '@common/decorators';
+import { RequestUser } from '@auth/types';
 
 @ApiBearerAuth()
 @ApiTags('Users')
@@ -10,7 +12,7 @@ export class UsersController {
 
   @Get('me')
   @ApiOperation({ summary: '[Все аутентифицированные] профиль' })
-  async me() {
-    return Promise.resolve('you');
+  async me(@CurrentUser() currentUser: RequestUser) {
+    return this.usersService.me(currentUser);
   }
 }

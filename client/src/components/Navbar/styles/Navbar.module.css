@@ -4,6 +4,12 @@
   align-items: center;
   min-height: 90px;
   padding: 0 20px;
+  background: rgba(26, 26, 46, 0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .logo {
@@ -14,11 +20,11 @@
 .logoText {
   font-size: 24px;
   font-weight: 700;
-  color: #667eea;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #667eea 0%, #8b9eff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  text-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
 }
 
 .headerNav {
@@ -32,13 +38,18 @@
 .headerNavLink {
   text-transform: uppercase;
   text-decoration: none;
-  color: #333;
+  color: rgba(255, 255, 255, 0.8);
   font-weight: 500;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
+  padding: 8px 16px;
+  border-radius: 8px;
+  position: relative;
 }
 
 .headerNavLink:hover {
-  color: #667eea;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
 }
 
 .authSection {
@@ -62,5 +73,6 @@
 
   .headerNavLink {
     font-size: 14px;
+    padding: 6px 12px;
   }
 }

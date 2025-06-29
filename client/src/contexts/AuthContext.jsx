@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import { authAPI } from "../api/auth.js";
+import { usersAPI } from "../api/users.js";
 
 const AuthContext = createContext();
 
@@ -10,19 +11,32 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Функция для получения полной информации о пользователе
+  const fetchUserInfo = async () => {
+    try {
+      const userData = await usersAPI.getCurrentUser();
+      setUser(userData);
+      localStorage.setItem("user", JSON.stringify(userData));
+      return userData;
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+      throw error;
+    }
+  };
+
   // Проверяем токен при загрузке приложения
   useEffect(() => {
     const initAuth = async () => {
       const token = localStorage.getItem("accessToken");
-      const savedUser = localStorage.getItem("user");
 
-      if (token && savedUser) {
+      if (token) {
         try {
           // Пытаемся обновить токен для проверки валидности
           await authAPI.refresh();
-          const userData = JSON.parse(savedUser);
-          setUser(userData);
-        } catch {
+          // Получаем актуальную информацию о пользователе
+          await fetchUserInfo();
+        } catch (error) {
+          console.error("Auth initialization error:", error);
           // Если токен невалиден, очищаем localStorage
           localStorage.removeItem("accessToken");
           localStorage.removeItem("user");
@@ -46,16 +60,8 @@ export const AuthProvider = ({ children }) => {
 
       localStorage.setItem("accessToken", response.accessToken);
 
-      // Проверяем, есть ли user в ответе
-      if (response.user) {
-        localStorage.setItem("user", JSON.stringify(response.user));
-        setUser(response.user);
-      } else {
-        // Создаем базовый объект пользователя
-        const basicUser = { email, name: email.split("@")[0] };
-        localStorage.setItem("user", JSON.stringify(basicUser));
-        setUser(basicUser);
-      }
+      // Получаем полную информацию о пользователе
+      await fetchUserInfo();
 
       return { success: true };
     } catch (error) {
@@ -73,14 +79,8 @@ export const AuthProvider = ({ children }) => {
 
       localStorage.setItem("accessToken", response.accessToken);
 
-      if (response.user) {
-        localStorage.setItem("user", JSON.stringify(response.user));
-        setUser(response.user);
-      } else {
-        const basicUser = { email, name: name || email.split("@")[0] };
-        localStorage.setItem("user", JSON.stringify(basicUser));
-        setUser(basicUser);
-      }
+      // Получаем полную информацию о пользователе
+      await fetchUserInfo();
 
       return { success: true };
     } catch (error) {
@@ -99,6 +99,8 @@ export const AuthProvider = ({ children }) => {
     } finally {
       setUser(null);
       setError(null);
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("user");
     }
   };
 

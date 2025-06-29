@@ -15,7 +15,6 @@ export class ReviewsService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly usersService: UsersService,
-    private readonly moviesService: MoviesService,
   ) {}
 
   async create(
