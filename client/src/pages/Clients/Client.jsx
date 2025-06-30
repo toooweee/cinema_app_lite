@@ -81,8 +81,7 @@ const Client = () => {
 
   // Проверяем права доступа
   const isAdmin =
-    user?.client?.role?.name === "ADMIN" ||
-    user?.employee?.role?.name === "ADMIN";
+    user?.client?.role === "ADMIN" || user?.employee?.role === "ADMIN";
   const canEdit = isAdmin;
   const canDelete = isAdmin;
 
@@ -90,8 +89,8 @@ const Client = () => {
   console.log("Client Page Debug:", {
     user,
     isAdmin,
-    clientRole: user?.client?.role?.name,
-    employeeRole: user?.employee?.role?.name,
+    clientRole: user?.client?.role,
+    employeeRole: user?.employee?.role,
   });
 
   if (loading) {

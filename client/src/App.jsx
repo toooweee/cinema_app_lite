@@ -55,7 +55,7 @@ const AppContent = () => {
           path="employees"
           element={
             <ProtectedRoute>
-              <RoleGuard allowedRoles={["ADMIN", "MANAGER"]}>
+              <RoleGuard allowedRoles={["Admin", "Manager"]}>
                 <Employee />
               </RoleGuard>
             </ProtectedRoute>
@@ -65,7 +65,7 @@ const AppContent = () => {
           path="clients"
           element={
             <ProtectedRoute>
-              <RoleGuard allowedRoles={["ADMIN", "MANAGER"]}>
+              <RoleGuard allowedRoles={["Admin", "Manager"]}>
                 <Client />
               </RoleGuard>
             </ProtectedRoute>

@@ -15,26 +15,29 @@ export class ReviewsService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly usersService: UsersService,
+    private readonly moviesService: MoviesService,
   ) {}
 
-  async create(
-    currentUser: RequestUser,
-    movieId: string,
-    createReviewDto: CreateReviewDto,
-  ) {
+  async create(currentUser: RequestUser, createReviewDto: CreateReviewDto) {
+    const { movieId } = createReviewDto;
+
     const user = await this.usersService.findOne({ id: currentUser.sub });
 
     if (!user) {
       throw new NotFoundException(`User with id ${currentUser.sub} not found`);
     }
 
-    return this.prismaService.review.create({
+    const review = await this.prismaService.review.create({
       data: {
         ...createReviewDto,
         movieId,
         userId: user.id,
       },
     });
+
+    await this.moviesService.calculateRating(movieId);
+
+    return review;
   }
 
   async findAll() {

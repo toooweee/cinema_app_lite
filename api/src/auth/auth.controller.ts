@@ -8,7 +8,7 @@ import {
   Res,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthDto } from '@auth/dto';
+import { AuthDto, RegisterDto } from '@auth/dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { refreshTokenKey } from '@tokens/types/refresh-token-key';
@@ -29,7 +29,7 @@ export class AuthController {
   })
   async register(
     @Res({ passthrough: true }) res: Response,
-    @Body() registerDto: AuthDto,
+    @Body() registerDto: RegisterDto,
   ) {
     const tokens = await this.authService.register(registerDto);
     this.setTokenToCookies(tokens.refreshToken, res);

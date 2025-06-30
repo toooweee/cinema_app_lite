@@ -27,11 +27,10 @@ export class ReviewsController {
   @Post()
   @ApiOperation({ summary: '[Все аутентифицированные] оставить отзыв' })
   async create(
-    @Param('id') movieId: string,
     @Body() createReviewDto: CreateReviewDto,
     @CurrentUser() currentUser: RequestUser,
   ) {
-    return this.reviewsService.create(currentUser, movieId, createReviewDto);
+    return this.reviewsService.create(currentUser, createReviewDto);
   }
 
   @Get()

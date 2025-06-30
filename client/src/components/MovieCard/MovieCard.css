@@ -90,6 +90,17 @@
   background: rgba(255, 255, 255, 0.3);
 }
 
+.movie-card-button.edit {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  min-width: 40px;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.movie-card-button.edit:hover {
+  background: linear-gradient(135deg, #218838 0%, #1ea085 100%);
+}
+
 .movie-card-rating {
   position: absolute;
   top: 12px;

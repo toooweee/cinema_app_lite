@@ -24,7 +24,7 @@ const UserCard = ({
   const isEmployee = type === "employee";
   const displayName = name || userData?.email || "Без имени";
   const email = userData?.email || "Email не указан";
-  const roleName = role?.name || "Не указана";
+  const roleName = role || "Не указана";
 
   // Форматируем даты
   const formatDate = (dateString) => {

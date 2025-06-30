@@ -12,13 +12,13 @@ export const authAPI = {
   },
 
   refresh: async () => {
-    const response = await api.post("/auth/refresh");
+    const response = await api.get("/auth/refresh");
     return response.data;
   },
 
   logout: async () => {
     try {
-      await api.post("/auth/logout");
+      await api.get("/auth/logout");
     } catch (error) {
       console.log("Logout error:", error);
     } finally {

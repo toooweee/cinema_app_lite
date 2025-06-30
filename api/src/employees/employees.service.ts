@@ -29,6 +29,8 @@ export class EmployeesService {
       ...createEmployeeDto.user,
     });
 
+    console.log(user);
+
     const role = await this.rolesService.findOne({
       id: createEmployeeDto.roleId,
     });

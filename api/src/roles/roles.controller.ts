@@ -9,7 +9,6 @@ import { ROLES } from 'src/roles/decorator';
 import { RolesGuard } from '@roles/guard';
 
 @UseGuards(RolesGuard)
-@ROLES(Roles.ADMIN)
 @ApiBearerAuth()
 @ApiTags('Roles')
 @Controller('roles')
@@ -17,12 +16,14 @@ export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
   @Post()
+  @ROLES(Roles.ADMIN)
   @ApiOperation({ summary: '[ADMIN] добавить роль' })
   async create(@Body() createRoleDto: CreateRoleDto) {
     return this.rolesService.create(createRoleDto);
   }
 
   @Get()
+  @ROLES(Roles.ADMIN, Roles.MANAGER)
   @ApiOperation({ summary: '[ADMIN] получить все роли' })
   async findAll(@CurrentUser() currentUser: RequestUser) {
     return this.rolesService.findAll();

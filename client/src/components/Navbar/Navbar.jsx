@@ -5,7 +5,26 @@ import UserAvatar from "../UserAvatar/UserAvatar.jsx";
 import { useAuth } from "../../hooks/useAuth.js";
 
 const Navbar = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
+
+  // Определяем роль пользователя
+  const userRole = (
+    user?.employee?.role ||
+    user?.client?.role ||
+    ""
+  ).toUpperCase();
+
+  let navLinks = [];
+  if (isAuthenticated) {
+    if (userRole === "ADMIN") {
+      navLinks = [
+        { to: "/employees", label: "Сотрудники" },
+        { to: "/clients", label: "Клиенты" },
+      ];
+    } else if (userRole === "MANAGER") {
+      navLinks = [{ to: "/clients", label: "Клиенты" }];
+    } // Для Client и остальных — пусто
+  }
 
   return (
     <div className={`${classes.navbar} container`}>
@@ -15,25 +34,13 @@ const Navbar = () => {
 
       <nav className={classes.headerNav}>
         <ul className={classes.headerNavList}>
-          {isAuthenticated && (
-            <>
-              <li>
-                <Link className={classes.headerNavLink} to="/movies">
-                  Фильмы
-                </Link>
-              </li>
-              <li>
-                <Link className={classes.headerNavLink} to="/employees">
-                  Сотрудники
-                </Link>
-              </li>
-              <li>
-                <Link className={classes.headerNavLink} to="/clients">
-                  Клиенты
-                </Link>
-              </li>
-            </>
-          )}
+          {navLinks.map((link) => (
+            <li key={link.to}>
+              <Link className={classes.headerNavLink} to={link.to}>
+                {link.label}
+              </Link>
+            </li>
+          ))}
         </ul>
       </nav>
 

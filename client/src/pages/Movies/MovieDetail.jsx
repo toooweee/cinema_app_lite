@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { moviesAPI } from "../../api/movies.js";
 import { useNotification } from "../../hooks/useNotification.js";
+import Reviews from "../../components/Reviews/Reviews.jsx";
 import "./MovieDetail.css";
 
 const MovieDetail = () => {
@@ -157,36 +158,15 @@ const MovieDetail = () => {
                 </a>
               </div>
             )}
-
-            {movie.reviews && movie.reviews.length > 0 && (
-              <div className="movie-reviews">
-                <h3>Отзывы ({movie.reviews.length})</h3>
-                <div className="reviews-list">
-                  {movie.reviews.slice(0, 3).map((review, index) => (
-                    <div key={index} className="review-item">
-                      <div className="review-header">
-                        <span className="review-author">
-                          {review.user?.name || "Аноним"}
-                        </span>
-                        <span className="review-rating">
-                          {"★".repeat(Math.floor(review.rating || 0))}
-                        </span>
-                      </div>
-                      {review.comment && (
-                        <p className="review-comment">{review.comment}</p>
-                      )}
-                    </div>
-                  ))}
-                </div>
-                {movie.reviews.length > 3 && (
-                  <p className="more-reviews">
-                    И еще {movie.reviews.length - 3} отзывов...
-                  </p>
-                )}
-              </div>
-            )}
           </div>
         </div>
+
+        {/* Компонент отзывов */}
+        <Reviews
+          movieId={movie.id}
+          reviews={movie.reviews || []}
+          onReviewsUpdate={fetchMovie}
+        />
       </div>
     </div>
   );

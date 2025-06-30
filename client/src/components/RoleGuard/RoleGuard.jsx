@@ -20,9 +20,9 @@ const RoleGuard = ({ children, allowedRoles = [] }) => {
   let userRole = null;
 
   if (user?.client?.role) {
-    userRole = user.client.role.name;
+    userRole = user.client.role; // Роль приходит как строка "Client"
   } else if (user?.employee?.role) {
-    userRole = user.employee.role.name;
+    userRole = user.employee.role; // Роль приходит как строка "ADMIN", "MANAGER" и т.д.
   }
 
   // Отладочная информация
@@ -32,8 +32,8 @@ const RoleGuard = ({ children, allowedRoles = [] }) => {
     allowedRoles,
     hasClient: !!user?.client,
     hasEmployee: !!user?.employee,
-    clientRole: user?.client?.role?.name,
-    employeeRole: user?.employee?.role?.name,
+    clientRole: user?.client?.role,
+    employeeRole: user?.employee?.role,
   });
 
   // Если роль не найдена, показываем сообщение с отладочной информацией
@@ -50,8 +50,8 @@ const RoleGuard = ({ children, allowedRoles = [] }) => {
           <p>Email: {user?.email}</p>
           <p>Есть client: {user?.client ? "Да" : "Нет"}</p>
           <p>Есть employee: {user?.employee ? "Да" : "Нет"}</p>
-          <p>Client role: {user?.client?.role?.name || "Не найдена"}</p>
-          <p>Employee role: {user?.employee?.role?.name || "Не найдена"}</p>
+          <p>Client role: {user?.client?.role || "Не найдена"}</p>
+          <p>Employee role: {user?.employee?.role || "Не найдена"}</p>
         </div>
       </div>
     );

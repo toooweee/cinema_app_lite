@@ -41,32 +41,53 @@ export class UsersService {
   }
 
   async me(currentUser: RequestUser) {
-    const includeOption: Prisma.UserInclude = {
-      avatars: {
-        orderBy: [{ createdAt: 'desc' }],
-        take: 1,
-        select: { path: true },
-      },
-      reviews: true,
-      client: {
-        include: {
-          role: true,
-        },
-      },
-      employee: {
-        include: {
-          role: true,
-        },
-      },
-    };
-
     const user = await this.prismaService.user.findUniqueOrThrow({
       where: { id: currentUser.sub },
-      include: includeOption,
+      include: {
+        employee: {
+          include: {
+            role: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+        client: {
+          include: {
+            role: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+        avatars: true,
+      },
     });
 
-    console.log(user);
-
-    return user;
+    return {
+      id: user.id,
+      email: user.email,
+      isActivated: user.isActivated,
+      createdAt: user.createdAt,
+      employee: user.employee
+        ? {
+            id: user.employee.id,
+            name: user.employee.name,
+            employmentDate: user.employee.employmentDate,
+            role: user.employee.role.name,
+          }
+        : undefined,
+      client: user.client
+        ? {
+            id: user.client.id,
+            name: user.client.name,
+            dateOfBirth: user.client.dateOfBirth,
+            role: user.client.role.name,
+          }
+        : undefined,
+      avatars: user.avatars,
+    };
   }
 }

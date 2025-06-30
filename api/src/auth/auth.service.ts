@@ -4,7 +4,7 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { PrismaService } from '@prisma/prisma.service';
-import { AuthDto } from '@auth/dto';
+import { AuthDto, RegisterDto } from '@auth/dto';
 import { UsersService } from '@users/users.service';
 import * as argon from 'argon2';
 import { ConfigService } from '@nestjs/config';
@@ -24,8 +24,8 @@ export class AuthService {
     private readonly tokensService: TokensService,
   ) {}
 
-  async register(registerDto: AuthDto) {
-    const { email, password } = registerDto;
+  async register(registerDto: RegisterDto) {
+    const { email, password, name } = registerDto;
 
     const existingUser = await this.usersService.findOne({ email });
 
@@ -47,6 +47,7 @@ export class AuthService {
         activationLink,
         client: {
           create: {
+            name,
             roleId: role.id,
           },
         },

@@ -83,11 +83,11 @@ const UserAvatar = () => {
 
   // Получаем роль пользователя
   const getUserRole = () => {
-    if (user?.client?.role?.name) {
-      return user.client.role.name;
+    if (user?.client?.role) {
+      return user.client.role; // Роль приходит как строка "Client"
     }
-    if (user?.employee?.role?.name) {
-      return user.employee.role.name;
+    if (user?.employee?.role) {
+      return user.employee.role; // Роль приходит как строка "ADMIN", "MANAGER" и т.д.
     }
     return null;
   };

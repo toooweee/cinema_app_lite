@@ -41,6 +41,7 @@ export class MoviesService {
             },
           },
         },
+        reviews: true,
         images: true,
       },
     });
@@ -90,6 +91,32 @@ export class MoviesService {
     }
   }
 
+  async calculateRating(id: string) {
+    const reviews = await this.prismaService.review.findMany({
+      where: {
+        movieId: id,
+      },
+      select: {
+        score: true,
+      },
+    });
+
+    const sum = reviews.reduce((a, b) => {
+      return a + b.score;
+    }, 0);
+
+    const rating = sum / reviews.length;
+
+    return this.prismaService.movie.update({
+      where: {
+        id,
+      },
+      data: {
+        rating,
+      },
+    });
+  }
+
   async findOne(id: string) {
     const movie = await this.prismaService.movie.findUniqueOrThrow({
       where: {
@@ -105,6 +132,8 @@ export class MoviesService {
         reviews: true,
       },
     });
+
+    console.log(movie);
 
     return {
       ...movie,

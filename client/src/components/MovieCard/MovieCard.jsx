@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./MovieCard.css";
 
-const MovieCard = ({ movie }) => {
+const MovieCard = ({ movie, onEdit }) => {
   const { id, name, description, rating, images, genres, link } = movie;
 
   // Получаем первое изображение или используем заглушку
@@ -19,6 +19,14 @@ const MovieCard = ({ movie }) => {
 
   // Форматируем рейтинг
   const formattedRating = rating ? rating.toFixed(1) : "0.0";
+
+  const handleEditClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onEdit) {
+      onEdit(movie);
+    }
+  };
 
   return (
     <div className="movie-card">
@@ -44,6 +52,15 @@ const MovieCard = ({ movie }) => {
               >
                 Смотреть
               </a>
+            )}
+            {onEdit && (
+              <button
+                onClick={handleEditClick}
+                className="movie-card-button edit"
+                title="Редактировать"
+              >
+                ✏️
+              </button>
             )}
           </div>
         </div>
