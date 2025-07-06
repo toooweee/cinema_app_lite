@@ -1,9 +1,47 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 import "./styles/Footer.css";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const { isAuthenticated, user } = useAuth();
+
+  // Определяем роль пользователя
+  const userRole = (
+    user?.employee?.role ||
+    user?.client?.role ||
+    user?.role?.name ||
+    ""
+  ).toUpperCase();
+
+  let navLinks = [];
+  if (isAuthenticated) {
+    if (userRole === "ADMIN") {
+      navLinks = [
+        { to: "/movies", label: "Фильмы" },
+        { to: "/employees", label: "Сотрудники" },
+        { to: "/clients", label: "Клиенты" },
+        { to: "/roles", label: "Роли" },
+        { to: "/genres", label: "Жанры" },
+        { to: "/profile", label: "Профиль" },
+      ];
+    } else if (userRole === "MANAGER") {
+      navLinks = [
+        { to: "/movies", label: "Фильмы" },
+        { to: "/clients", label: "Клиенты" },
+        { to: "/genres", label: "Жанры" },
+        { to: "/profile", label: "Профиль" },
+      ];
+    } else {
+      navLinks = [
+        { to: "/movies", label: "Фильмы" },
+        { to: "/profile", label: "Профиль" },
+      ];
+    }
+  } else {
+    navLinks = [{ to: "/movies", label: "Фильмы" }];
+  }
 
   return (
     <footer className="footer">
@@ -29,17 +67,16 @@ const Footer = () => {
         <div className="footer-section">
           <h4>Навигация</h4>
           <ul className="footer-links">
+            {navLinks.map((link) => (
+              <li key={link.to}>
+                <Link to={link.to}>{link.label}</Link>
+              </li>
+            ))}
             <li>
-              <Link to="/movies">Фильмы</Link>
+              <Link to="/privacy">Политика конфиденциальности</Link>
             </li>
             <li>
-              <Link to="/profile">Профиль</Link>
-            </li>
-            <li>
-              <Link to="/employees">Сотрудники</Link>
-            </li>
-            <li>
-              <Link to="/clients">Клиенты</Link>
+              <Link to="/terms">Условия пользования</Link>
             </li>
           </ul>
         </div>
@@ -77,9 +114,9 @@ const Footer = () => {
         <div className="footer-bottom-content">
           <p>&copy; {currentYear} Cinema App. Все права защищены.</p>
           <div className="footer-bottom-links">
-            <a href="#">Политика конфиденциальности</a>
+            <Link to="/privacy">Политика конфиденциальности</Link>
             <span className="separator">•</span>
-            <a href="#">Условия использования</a>
+            <Link to="/terms">Условия пользования</Link>
           </div>
         </div>
       </div>

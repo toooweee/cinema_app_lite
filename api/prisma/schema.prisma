@@ -92,7 +92,7 @@ model Review {
   title       String
   description String
   score       Int
-  user        User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  user        User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String? @map("user_id")
   movie       Movie   @relation(fields: [movieId], references: [id])
   movieId     String  @map("movie_id")

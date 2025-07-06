@@ -70,6 +70,11 @@ export class EmployeesService {
               },
             },
           },
+          role: {
+            select: {
+              name: true,
+            },
+          },
         },
       });
     }
@@ -87,6 +92,11 @@ export class EmployeesService {
                 path: true,
               },
             },
+          },
+        },
+        role: {
+          select: {
+            name: true,
           },
         },
       },

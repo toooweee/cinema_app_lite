@@ -26,6 +26,13 @@ export const usersAPI = {
     return response.data;
   },
 
+  dismissEmployee: async (id) => {
+    const response = await api.patch(`/employees/${id}`, {
+      dismissalDate: new Date().toISOString(),
+    });
+    return response.data;
+  },
+
   getAllClients: async () => {
     const response = await api.get("/clients");
     return response.data;
@@ -38,6 +45,13 @@ export const usersAPI = {
 
   deleteClient: async (id) => {
     const response = await api.delete(`/clients/${id}`);
+    return response.data;
+  },
+
+  uploadAvatar: async (formData) => {
+    const response = await api.patch("/users/avatar", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
     return response.data;
   },
 };

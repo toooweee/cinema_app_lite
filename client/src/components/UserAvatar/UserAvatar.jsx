@@ -92,10 +92,27 @@ const UserAvatar = () => {
     return null;
   };
 
+  // Получаем ссылку на аватарку
+  const getAvatarUrl = () => {
+    if (user?.avatars && user.avatars.length > 0) {
+      const last = user.avatars[user.avatars.length - 1];
+      return `http://localhost:3000/${last.path}`;
+    }
+    return null;
+  };
+
   return (
     <div className="user-avatar-container" ref={dropdownRef}>
       <button className="avatar-button" onClick={toggleDropdown}>
-        <div className="avatar">{getInitials()}</div>
+        {getAvatarUrl() ? (
+          <img
+            src={getAvatarUrl()}
+            alt="avatar"
+            className="avatar avatar-img"
+          />
+        ) : (
+          <div className="avatar">{getInitials()}</div>
+        )}
         <span className="avatar-name">{getDisplayName()}</span>
         <svg
           className={`dropdown-arrow ${isOpen ? "open" : ""}`}
@@ -115,7 +132,15 @@ const UserAvatar = () => {
       {isOpen && (
         <div className="dropdown-menu">
           <div className="dropdown-header">
-            <div className="dropdown-avatar">{getInitials()}</div>
+            {getAvatarUrl() ? (
+              <img
+                src={getAvatarUrl()}
+                alt="avatar"
+                className="dropdown-avatar avatar-img"
+              />
+            ) : (
+              <div className="dropdown-avatar">{getInitials()}</div>
+            )}
             <div className="dropdown-user-info">
               <div className="dropdown-name">{getDisplayName()}</div>
               <div className="dropdown-email">{user?.email}</div>

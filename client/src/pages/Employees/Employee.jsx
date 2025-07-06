@@ -92,17 +92,19 @@ const Employee = () => {
   const handleDeleteEmployee = async (employee) => {
     if (
       !window.confirm(
-        `Вы уверены, что хотите удалить сотрудника "${employee.name || employee.user?.email}"?`
+        `Вы уверены, что хотите уволить сотрудника "${employee.name || employee.user?.email}"?`
       )
     ) {
       return;
     }
 
     try {
-      showError("Удаление сотрудников пока не поддерживается");
+      await usersAPI.dismissEmployee(employee.id);
+      showSuccess("Сотрудник успешно уволен (запись не удалена)");
+      await fetchEmployees();
     } catch (error) {
       console.error("Error deleting employee:", error);
-      showError("Ошибка при удалении сотрудника");
+      showError("Ошибка при увольнении сотрудника");
     }
   };
 

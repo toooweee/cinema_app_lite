@@ -6,8 +6,9 @@ import * as argon from 'argon2';
 import * as uuid from 'uuid';
 import { ConfigService } from '@nestjs/config';
 import { RequestUser } from '@auth/types';
-import Roles from '@roles/types/roles.enum';
-import SortOrder = Prisma.SortOrder;
+import * as fs from 'fs/promises';
+import * as path from 'node:path';
+import * as process from 'node:process';
 
 @Injectable()
 export class UsersService {
@@ -30,6 +31,31 @@ export class UsersService {
         activationLink,
       },
     });
+  }
+
+  async loadAvatar(currentUser: RequestUser, file: Express.Multer.File) {
+    const savedPath: string = '';
+
+    try {
+      return await this.prismaService.user.update({
+        where: {
+          id: currentUser.sub,
+        },
+        data: {
+          avatars: {
+            create: {
+              path: file.filename,
+            },
+          },
+        },
+      });
+    } catch {
+      try {
+        await fs.unlink(path.join(process.cwd(), 'uploads', savedPath));
+      } catch {
+        console.log('Ошибка удаления аватарок');
+      }
+    }
   }
 
   async findAll() {}

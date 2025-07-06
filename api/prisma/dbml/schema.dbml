@@ -126,7 +126,7 @@ Ref: clients.userId - users.id [delete: Cascade]
 
 Ref: clients.roleId > roles.id [delete: Restrict]
 
-Ref: reviews.userId > users.id [delete: Set Null]
+Ref: reviews.userId > users.id [delete: Cascade]
 
 Ref: reviews.movieId > movies.id
 

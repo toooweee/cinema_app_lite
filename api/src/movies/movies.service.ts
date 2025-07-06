@@ -83,7 +83,7 @@ export class MoviesService {
     } catch {
       for (const filePath of savedPaths) {
         try {
-          await fs.unlink(path.join(process.cwd(), filePath));
+          await fs.unlink(path.join(process.cwd(), 'uploads', filePath));
         } catch {
           console.log('Ошибка удаления файла');
         }
@@ -129,11 +129,25 @@ export class MoviesService {
           },
         },
         images: true,
-        reviews: true,
+        reviews: {
+          include: {
+            user: {
+              include: {
+                avatars: {
+                  orderBy: {
+                    createdAt: 'desc',
+                  },
+                  take: 1,
+                  select: {
+                    path: true,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     });
-
-    console.log(movie);
 
     return {
       ...movie,

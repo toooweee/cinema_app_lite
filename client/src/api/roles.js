@@ -12,4 +12,10 @@ export const rolesAPI = {
     const response = await api.post("/roles", roleData);
     return response.data;
   },
+
+  // Обновить роль (только для админов)
+  update: async (id, roleData) => {
+    const response = await api.patch(`/roles/${id}`, roleData);
+    return response.data;
+  },
 };

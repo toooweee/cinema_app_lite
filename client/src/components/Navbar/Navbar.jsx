@@ -20,9 +20,14 @@ const Navbar = () => {
       navLinks = [
         { to: "/employees", label: "Сотрудники" },
         { to: "/clients", label: "Клиенты" },
+        { to: "/roles", label: "Роли" },
+        { to: "/genres", label: "Жанры" },
       ];
     } else if (userRole === "MANAGER") {
-      navLinks = [{ to: "/clients", label: "Клиенты" }];
+      navLinks = [
+        { to: "/clients", label: "Клиенты" },
+        { to: "/genres", label: "Жанры" },
+      ];
     } // Для Client и остальных — пусто
   }
 

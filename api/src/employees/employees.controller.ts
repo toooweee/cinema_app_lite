@@ -45,7 +45,6 @@ export class EmployeesController {
   }
 
   @Patch(':id')
-  @Post()
   @ROLES(Roles.ADMIN)
   @ApiOperation({ summary: '[ADMIN] обновить данные сотрудника' })
   async update(

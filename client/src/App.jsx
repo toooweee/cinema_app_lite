@@ -15,10 +15,14 @@ import { AuthProvider } from "./contexts/AuthContext.jsx";
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar.jsx";
 import Footer from "./components/Footer/Footer.jsx";
+import Roles from "./pages/Roles/Roles";
+import Genres from "./pages/Genres/Genres";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
 
 const AppContent = () => {
   const location = useLocation();
-  const isAuthPage = location.pathname === "/auth" || location.pathname === "/";
+  const isAuthPage = location.pathname === "/auth";
 
   return (
     <>
@@ -35,22 +39,8 @@ const AppContent = () => {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="movies"
-          element={
-            <ProtectedRoute>
-              <Movie />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="movies/:id"
-          element={
-            <ProtectedRoute>
-              <MovieDetail />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="movies" element={<Movie />} />
+        <Route path="movies/:id" element={<MovieDetail />} />
         <Route
           path="employees"
           element={
@@ -71,7 +61,29 @@ const AppContent = () => {
             </ProtectedRoute>
           }
         />
-        <Route path="/" element={<Auth />} />
+        <Route path="/" element={<Movie />} />
+        <Route
+          path="roles"
+          element={
+            <ProtectedRoute>
+              <RoleGuard allowedRoles={["Admin"]}>
+                <Roles />
+              </RoleGuard>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="genres"
+          element={
+            <ProtectedRoute>
+              <RoleGuard allowedRoles={["Admin", "Manager"]}>
+                <Genres />
+              </RoleGuard>
+            </ProtectedRoute>
+          }
+        />
+        <Route path="privacy" element={<Privacy />} />
+        <Route path="terms" element={<Terms />} />
         <Route path="*" element={<Error />} />
       </Routes>
 

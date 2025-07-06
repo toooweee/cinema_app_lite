@@ -42,7 +42,7 @@ export class ReviewsController {
   @Get(':id')
   @ApiOperation({ summary: '[Все аутентифицированные] получить отзыв по id' })
   async findOne(@Param('id') id: string) {
-    return this.reviewsService.findOne(+id);
+    return this.reviewsService.findOne(id);
   }
 
   @Patch(':id')
@@ -51,12 +51,12 @@ export class ReviewsController {
     @Param('id') id: string,
     @Body() updateReviewDto: UpdateReviewDto,
   ) {
-    return this.reviewsService.update(+id, updateReviewDto);
+    return this.reviewsService.update(id, updateReviewDto);
   }
 
   @Delete(':id')
   @ApiOperation({ summary: '[Все аутентифицированные] удалить СВОЙ отзыв' })
   async remove(@Param('id') id: string) {
-    return this.reviewsService.remove(+id);
+    return this.reviewsService.remove(id);
   }
 }

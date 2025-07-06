@@ -4,7 +4,6 @@ import "./UserCard.css";
 const UserCard = ({
   user,
   type = "client",
-  onEdit,
   onDelete,
   canEdit = false,
   canDelete = false,
@@ -17,14 +16,16 @@ const UserCard = ({
     dismissalDate,
     dateOfBirth,
     user: userData,
-    createdAt,
   } = user;
 
   // Определяем тип пользователя и соответствующие данные
   const isEmployee = type === "employee";
   const displayName = name || userData?.email || "Без имени";
   const email = userData?.email || "Email не указан";
-  const roleName = role || "Не указана";
+  const roleName =
+    typeof role === "object" && role !== null
+      ? role.name
+      : role || "Не указана";
 
   // Форматируем даты
   const formatDate = (dateString) => {
@@ -59,11 +60,24 @@ const UserCard = ({
   const employeeStatus = isEmployee ? getEmployeeStatus() : null;
   const clientAge = !isEmployee && dateOfBirth ? getAge(dateOfBirth) : null;
 
+  // Получить ссылку на аватарку
+  const getAvatarUrl = () => {
+    if (userData?.avatars && userData.avatars.length > 0) {
+      const last = userData.avatars[userData.avatars.length - 1];
+      return `http://localhost:3000/${last.path}`;
+    }
+    return null;
+  };
+
   return (
     <div className="user-card">
       <div className="user-card-header">
         <div className="user-avatar">
-          <span className="avatar-icon">{isEmployee ? "👨‍💼" : "👤"}</span>
+          {getAvatarUrl() ? (
+            <img src={getAvatarUrl()} alt="avatar" className="avatar-img" />
+          ) : (
+            <span className="avatar-icon">{isEmployee ? "🧳" : "👤"}</span>
+          )}
         </div>
 
         <div className="user-info">
@@ -81,20 +95,11 @@ const UserCard = ({
 
         {(canEdit || canDelete) && (
           <div className="user-actions">
-            {canEdit && (
-              <button
-                className="action-button edit"
-                onClick={() => onEdit(user)}
-                title="Редактировать"
-              >
-                ✏️
-              </button>
-            )}
             {canDelete && (
               <button
                 className="action-button delete"
                 onClick={() => onDelete(user)}
-                title="Удалить"
+                title={isEmployee ? "Уволить" : "Удалить"}
               >
                 🗑️
               </button>
@@ -134,7 +139,9 @@ const UserCard = ({
 
         <div className="detail-item">
           <span className="detail-label">Дата регистрации:</span>
-          <span className="detail-value">{formatDate(createdAt)}</span>
+          <span className="detail-value">
+            {formatDate(userData?.createdAt)}
+          </span>
         </div>
       </div>
 

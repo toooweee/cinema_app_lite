@@ -15,7 +15,7 @@ api.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  },
+  }
 );
 
 api.interceptors.response.use(
@@ -29,7 +29,7 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const response = await api.post("/auth/refresh");
+        const response = await api.get("/auth/refresh");
         const { accessToken } = response.data;
 
         localStorage.setItem("accessToken", accessToken);
@@ -45,7 +45,7 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  },
+  }
 );
 
 export default api;

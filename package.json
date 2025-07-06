@@ -3,9 +3,34 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:build": "docker-compose build",
+    "docker:logs": "docker-compose logs -f",
+    "docker:restart": "docker-compose restart",
+    "docker:clean": "docker-compose down -v --remove-orphans",
+    "docker:status": "docker-compose ps",
+    "docker:logs:api": "docker-compose logs -f api",
+    "docker:logs:client": "docker-compose logs -f client",
+    "docker:logs:db": "docker-compose logs -f postgres",
+    "docker:shell:api": "docker-compose exec api sh",
+    "docker:shell:client": "docker-compose exec client sh",
+    "docker:shell:db": "docker-compose exec postgres psql -U postgres -d cinema_app_v1",
+    "start": "docker-compose up -d --build",
+    "stop": "docker-compose down",
+    "dev": "docker-compose up --build",
+    "build": "docker-compose build --no-cache",
+    "logs": "docker-compose logs -f",
+    "studio": "docker-compose exec api npx prisma studio",
+    "status": "docker-compose ps"
   },
-  "keywords": [],
+  "keywords": [
+    "cinema",
+    "app",
+    "docker",
+    "nestjs",
+    "react"
+  ],
   "author": "",
   "license": "ISC",
   "description": ""

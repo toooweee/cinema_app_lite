@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@prisma/prisma.service';
 
 @Injectable()
@@ -16,6 +16,12 @@ export class ClientsService {
               },
               take: 1,
             },
+            createdAt: true,
+          },
+        },
+        role: {
+          select: {
+            name: true,
           },
         },
       },
@@ -42,10 +48,44 @@ export class ClientsService {
   }
 
   async delete(id: string) {
-    return this.prismaService.client.delete({
-      where: {
-        id,
+    // Находим клиента с зависимостями
+    const client = await this.prismaService.client.findUnique({
+      where: { id },
+      include: {
+        user: {
+          include: {
+            avatars: true,
+            token: true,
+            reviews: true,
+          },
+        },
       },
+    });
+
+    if (!client) {
+      throw new NotFoundException(`Client with id ${id} not found`);
+    }
+
+    if (client.user) {
+      await this.prismaService.avatar.deleteMany({
+        where: { userId: client.user.id },
+      });
+
+      await this.prismaService.token.deleteMany({
+        where: { userId: client.user.id },
+      });
+
+      await this.prismaService.review.deleteMany({
+        where: { userId: client.user.id },
+      });
+
+      await this.prismaService.user.delete({
+        where: { id: client.user.id },
+      });
+    }
+
+    return this.prismaService.client.delete({
+      where: { id },
     });
   }
 }

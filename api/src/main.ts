@@ -36,7 +36,3 @@ async function bootstrap() {
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
-
-// доделать clients (20 минут)
-// апдейт movies для пагинации и сортировки (40 минут)
-// сделать reviews к фильмам (2 часа)

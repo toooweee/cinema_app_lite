@@ -18,6 +18,7 @@ import { join } from 'path';
 import { MulterModule } from '@nestjs/platform-express';
 import { multerConfig } from './common/config';
 import { ReviewsModule } from './reviews/reviews.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { ReviewsModule } from './reviews/reviews.module';
     GenresModule,
     ReviewsModule,
   ],
+  controllers: [AppController],
   providers: [
     { provide: APP_FILTER, useClass: PrismaExceptionFilter },
     { provide: APP_PIPE, useClass: ZodValidationPipe },

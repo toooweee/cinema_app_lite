@@ -44,15 +44,30 @@ export class ReviewsService {
     return this.prismaService.review.findMany();
   }
 
-  async findOne(id: number) {
-    return `This action returns a #${id} review`;
+  async findOne(id: string) {
+    return this.prismaService.review.findUnique({
+      where: {
+        id,
+      },
+    });
   }
 
-  async update(id: number, updateReviewDto: UpdateReviewDto) {
-    return `This action updates a #${id} review`;
+  async update(id: string, updateReviewDto: UpdateReviewDto) {
+    return this.prismaService.review.update({
+      where: {
+        id,
+      },
+      data: {
+        ...updateReviewDto,
+      },
+    });
   }
 
-  async remove(id: number) {
-    return `This action removes a #${id} review`;
+  async remove(id: string) {
+    return this.prismaService.review.delete({
+      where: {
+        id,
+      },
+    });
   }
 }

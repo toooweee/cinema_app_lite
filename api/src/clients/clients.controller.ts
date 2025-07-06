@@ -29,7 +29,7 @@ export class ClientsController {
   @Delete(':id')
   @ROLES(Roles.ADMIN)
   @ApiOperation({ summary: '[ADMIN] удалить пользователя' })
-  async delete(id: string) {
+  async delete(@Param('id') id: string) {
     return this.clientsService.delete(id);
   }
 }

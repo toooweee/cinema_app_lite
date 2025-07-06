@@ -108,6 +108,11 @@ export const AuthProvider = ({ children }) => {
     setError(null);
   };
 
+  // Обновить пользователя вручную (например, после загрузки аватарки)
+  const updateUser = async () => {
+    return await fetchUserInfo();
+  };
+
   const value = {
     user,
     loading,
@@ -116,6 +121,7 @@ export const AuthProvider = ({ children }) => {
     register,
     logout,
     clearError,
+    updateUser,
     isAuthenticated: !!user,
   };
 

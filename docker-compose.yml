@@ -1,0 +1,55 @@
+services:
+  postgres:
+    image: postgres:latest
+    restart: always
+    ports:
+      - "5430:5432"
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - cinema_app_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    volumes:
+      - ./api/uploads:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - cinema_app_network
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_URL: http://localhost:3000/api
+    depends_on:
+      - api
+    networks:
+      - cinema_app_network
+
+volumes:
+  postgres_data:
+
+networks:
+  cinema_app_network:
+    driver: bridge

@@ -192,6 +192,15 @@ const Reviews = ({ movieId, reviews = [], onReviewsUpdate }) => {
     });
   };
 
+  // Получить аватарку пользователя для отзыва
+  const getReviewAvatar = (review) => {
+    if (review.user?.avatars && review.user.avatars.length > 0) {
+      const last = review.user.avatars[review.user.avatars.length - 1];
+      return `http://localhost:3000/${last.path}`;
+    }
+    return null;
+  };
+
   return (
     <div className="reviews-section">
       <div className="reviews-header">
@@ -322,10 +331,17 @@ const Reviews = ({ movieId, reviews = [], onReviewsUpdate }) => {
               <div className="review-header">
                 <div className="review-author">
                   <div className="author-avatar">
-                    {review.user?.client?.name?.charAt(0)?.toUpperCase() ||
-                      review.user?.employee?.name?.charAt(0)?.toUpperCase() ||
-                      review.user?.email?.charAt(0)?.toUpperCase() ||
-                      "U"}
+                    {getReviewAvatar(review) ? (
+                      <img
+                        src={getReviewAvatar(review)}
+                        alt="avatar"
+                        className="review-avatar-img"
+                      />
+                    ) : review.user?.name ? (
+                      review.user.name.charAt(0).toUpperCase()
+                    ) : (
+                      review.user?.email?.charAt(0).toUpperCase() || "U"
+                    )}
                   </div>
                   <div className="author-info">
                     <div className="author-name">

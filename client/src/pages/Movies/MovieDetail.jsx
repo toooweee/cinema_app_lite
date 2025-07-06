@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { moviesAPI } from "../../api/movies.js";
 import { useNotification } from "../../hooks/useNotification.js";
 import Reviews from "../../components/Reviews/Reviews.jsx";
+import { useAuth } from "../../hooks/useAuth.js";
 import "./MovieDetail.css";
 
 const MovieDetail = () => {
@@ -12,6 +13,7 @@ const MovieDetail = () => {
   const [loading, setLoading] = useState(true);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const { showError } = useNotification();
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     fetchMovie();
@@ -162,11 +164,13 @@ const MovieDetail = () => {
         </div>
 
         {/* Компонент отзывов */}
-        <Reviews
-          movieId={movie.id}
-          reviews={movie.reviews || []}
-          onReviewsUpdate={fetchMovie}
-        />
+        {isAuthenticated && (
+          <Reviews
+            movieId={movie.id}
+            reviews={movie.reviews || []}
+            onReviewsUpdate={fetchMovie}
+          />
+        )}
       </div>
     </div>
   );
